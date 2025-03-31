@@ -1,14 +1,22 @@
-import "dotenv/config"
-import { createBot, createProvider, createFlow, addKeyword, EVENTS } from '@builderbot/bot'
-import { MemoryDB } from '@builderbot/bot'
-import { BaileysProvider } from '@builderbot/provider-baileys'
-import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants"
-import { typing } from "./utils/presence"
+import "dotenv/config";
+import {
+  createBot,
+  createProvider,
+  createFlow,
+  addKeyword,
+  EVENTS,
+} from "@builderbot/bot";
+import { MemoryDB } from "@builderbot/bot";
+import { BaileysProvider } from "@builderbot/provider-baileys";
+import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants";
+import { typing } from "./utils/presence";
+import LinkDePago from "./flows/LinkDePago";
+import { blacklist } from "./lib/shopFunctions";
 
 /** Puerto en el que se ejecutará el servidor */
-const PORT = process.env.PORT ?? 3008
+const PORT = process.env.PORT ?? 3008;
 /** ID del asistente de OpenAI */
-const ASSISTANT_ID = process.env.ASSISTANT_ID ?? ''
+const ASSISTANT_ID = process.env.ASSISTANT_ID ?? "";
 const userQueues = new Map();
 const userLocks = new Map(); // New lock mechanism
 
@@ -17,63 +25,83 @@ const userLocks = new Map(); // New lock mechanism
  * and sending the response back to the user.
  */
 const processUserMessage = async (ctx, { flowDynamic, state, provider }) => {
-    await typing(ctx, provider);
-    const response = await toAsk(ASSISTANT_ID, ctx.body, state);
+  await typing(ctx, provider);
+  const response = await toAsk(ASSISTANT_ID, ctx.body, state);
 
-    // Split the response into chunks and send them sequentially
-    const chunks = response.split(/\n\n+/);
-    for (const chunk of chunks) {
-        const cleanedChunk = chunk.trim().replace(/【.*?】[ ] /g, "");
-        await flowDynamic([{ body: cleanedChunk }]);
-    }
+  // Split the response into chunks and send them sequentially
+  const chunks = response.split(/\n\n+/);
+  for (const chunk of chunks) {
+    const cleanedChunk = chunk.trim().replace(/【.*?】[ ] /g, "");
+    await flowDynamic([{ body: cleanedChunk }]);
+  }
 };
 
 /**
  * Function to handle the queue for each user.
  */
 const handleQueue = async (userId) => {
-    const queue = userQueues.get(userId);
+  const queue = userQueues.get(userId);
 
-    if (userLocks.get(userId)) {
-        return; // If locked, skip processing
+  if (userLocks.get(userId)) {
+    return; // If locked, skip processing
+  }
+
+  while (queue.length > 0) {
+    userLocks.set(userId, true); // Lock the queue
+    const { ctx, flowDynamic, state, provider } = queue.shift();
+    try {
+      await processUserMessage(ctx, { flowDynamic, state, provider });
+    } catch (error) {
+      console.error(`Error processing message for user ${userId}:`, error);
+    } finally {
+      userLocks.set(userId, false); // Release the lock
     }
+  }
 
-    while (queue.length > 0) {
-        userLocks.set(userId, true); // Lock the queue
-        const { ctx, flowDynamic, state, provider } = queue.shift();
-        try {
-            await processUserMessage(ctx, { flowDynamic, state, provider });
-        } catch (error) {
-            console.error(`Error processing message for user ${userId}:`, error);
-        } finally {
-            userLocks.set(userId, false); // Release the lock
-        }
-    }
-
-    userLocks.delete(userId); // Remove the lock once all messages are processed
-    userQueues.delete(userId); // Remove the queue once all messages are processed
+  userLocks.delete(userId); // Remove the lock once all messages are processed
+  userQueues.delete(userId); // Remove the queue once all messages are processed
 };
 
 /**
  * Flujo de bienvenida que maneja las respuestas del asistente de IA
  * @type {import('@builderbot/bot').Flow<BaileysProvider, MemoryDB>}
  */
+
+const verEjemploFlow = addKeyword<BaileysProvider, MemoryDB>(
+  "Ver ejemplo"
+).addAction(async (ctx, { flowDynamic }) => {
+  const imageUrls = [
+    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533250/agency/almacen/urxaf3m7jmhotfsscpoq.webp",
+    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533250/agency/almacen/hcqec9zgfyqtqgankzn9.webp",
+    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533251/agency/almacen/od2huhh0d7lxegrqsn8x.webp",
+  ];
+
+  for (const url of imageUrls) {
+    await flowDynamic([{ media: url }]);
+  }
+});
+
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
-    .addAction(async (ctx, { flowDynamic, state, provider }) => {
-        const userId = ctx.from; // Use the user's ID to create a unique queue for each user
+  .addAction(async (ctx, { endFlow }) => {
+    if (blacklist.includes(ctx.from)) {
+      return endFlow();
+    }
+  })
+  .addAction(async (ctx, { flowDynamic, state, provider }) => {
+    const userId = ctx.from; // Use the user's ID to create a unique queue for each user
 
-        if (!userQueues.has(userId)) {
-            userQueues.set(userId, []);
-        }
+    if (!userQueues.has(userId)) {
+      userQueues.set(userId, []);
+    }
 
-        const queue = userQueues.get(userId);
-        queue.push({ ctx, flowDynamic, state, provider });
+    const queue = userQueues.get(userId);
+    queue.push({ ctx, flowDynamic, state, provider });
 
-        // If this is the only message in the queue, process it immediately
-        if (!userLocks.get(userId) && queue.length === 1) {
-            await handleQueue(userId);
-        }
-    });
+    // If this is the only message in the queue, process it immediately
+    if (!userLocks.get(userId) && queue.length === 1) {
+      await handleQueue(userId);
+    }
+  });
 
 /**
  * Función principal que configura y inicia el bot
@@ -81,39 +109,42 @@ const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
  * @returns {Promise<void>}
  */
 const main = async () => {
-    /**
-     * Flujo del bot
-     * @type {import('@builderbot/bot').Flow<BaileysProvider, MemoryDB>}
-     */
-    const adapterFlow = createFlow([welcomeFlow]);
+  /**
+   * Flujo del bot
+   * @type {import('@builderbot/bot').Flow<BaileysProvider, MemoryDB>}
+   */
+  const adapterFlow = createFlow([
+    welcomeFlow,
+    LinkDePago
+  ]);
 
-    /**
-     * Proveedor de servicios de mensajería
-     * @type {BaileysProvider}
-     */
-    const adapterProvider = createProvider(BaileysProvider, {
-        groupsIgnore: true,
-        readStatus: false,
-    });
+  /**
+   * Proveedor de servicios de mensajería
+   * @type {BaileysProvider}
+   */
+  const adapterProvider = createProvider(BaileysProvider, {
+    groupsIgnore: true,
+    readStatus: false,
+  });
 
-    /**
-     * Base de datos en memoria para el bot
-     * @type {MemoryDB}
-     */
-    const adapterDB = new MemoryDB();
+  /**
+   * Base de datos en memoria para el bot
+   * @type {MemoryDB}
+   */
+  const adapterDB = new MemoryDB();
 
-    /**
-     * Configuración y creación del bot
-     * @type {import('@builderbot/bot').Bot<BaileysProvider, MemoryDB>}
-     */
-    const { httpServer } = await createBot({
-        flow: adapterFlow,
-        provider: adapterProvider,
-        database: adapterDB,
-    });
+  /**
+   * Configuración y creación del bot
+   * @type {import('@builderbot/bot').Bot<BaileysProvider, MemoryDB>}
+   */
+  const { handleCtx, httpServer } = await createBot({
+    flow: adapterFlow,
+    provider: adapterProvider,
+    database: adapterDB,
+  });
 
-    httpInject(adapterProvider.server);
-    httpServer(+PORT);
+  httpInject(adapterProvider.server);
+  httpServer(+PORT);
 };
 
 main();
