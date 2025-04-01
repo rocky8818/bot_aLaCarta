@@ -12,6 +12,7 @@ import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants";
 import { typing } from "./utils/presence";
 import LinkDePago from "./flows/LinkDePago";
 import { blacklist } from "./lib/shopFunctions";
+import VerEjemplos from "./flows/VerEjemplos";
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008;
@@ -28,13 +29,15 @@ const processUserMessage = async (ctx, { flowDynamic, state, provider }) => {
   await typing(ctx, provider);
   const response = await toAsk(ASSISTANT_ID, ctx.body, state);
 
-  // Split the response into chunks and send them sequentially
+  // Divide la respuesta en fragmentos
   const chunks = response.split(/\n\n+/);
   for (const chunk of chunks) {
-    const cleanedChunk = chunk.trim().replace(/【.*?】[ ] /g, "");
+    // Elimina cualquier referencia dentro de 【 】 antes de enviarlo
+    const cleanedChunk = chunk.trim().replace(/【.*?】/g, "");
     await flowDynamic([{ body: cleanedChunk }]);
   }
 };
+
 
 /**
  * Function to handle the queue for each user.
@@ -67,19 +70,6 @@ const handleQueue = async (userId) => {
  * @type {import('@builderbot/bot').Flow<BaileysProvider, MemoryDB>}
  */
 
-const verEjemploFlow = addKeyword<BaileysProvider, MemoryDB>(
-  "Ver ejemplo"
-).addAction(async (ctx, { flowDynamic }) => {
-  const imageUrls = [
-    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533250/agency/almacen/urxaf3m7jmhotfsscpoq.webp",
-    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533250/agency/almacen/hcqec9zgfyqtqgankzn9.webp",
-    "https://res.cloudinary.com/dp9ldjfem/image/upload/v1710533251/agency/almacen/od2huhh0d7lxegrqsn8x.webp",
-  ];
-
-  for (const url of imageUrls) {
-    await flowDynamic([{ media: url }]);
-  }
-});
 
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
   .addAction(async (ctx, { endFlow }) => {
@@ -115,7 +105,8 @@ const main = async () => {
    */
   const adapterFlow = createFlow([
     welcomeFlow,
-    LinkDePago
+    LinkDePago,
+    VerEjemplos
   ]);
 
   /**
