@@ -13,6 +13,7 @@ import { typing } from "./utils/presence";
 import LinkDePago from "./flows/LinkDePago";
 import { blacklist } from "./lib/shopFunctions";
 import VerEjemplos from "./flows/VerEjemplos";
+import informes from "./flows/informes";
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008;
@@ -106,7 +107,8 @@ const main = async () => {
   const adapterFlow = createFlow([
     welcomeFlow,
     LinkDePago,
-    VerEjemplos
+    VerEjemplos,
+    informes
   ]);
 
   /**

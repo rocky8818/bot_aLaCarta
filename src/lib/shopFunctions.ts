@@ -31,5 +31,5 @@ export const keywordsArray = [
 ];
 
 export const blacklist = [
-  "dsfgsdg",
+  "+525545673307",
 ];
