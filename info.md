@@ -10,5 +10,3 @@
 *Este ebook es para ti si: Trabajas en oficina y deseas llevar comidas prácticas y sabrosas sin gastar una fortuna. Tienes horarios ocupados y prefieres cocinar una vez y olvidarte de la cocina por días. Quieres mejorar tu alimentación sin complicarte la vida. Ya seas un godín con horarios apretados, un freelancer en modo productivo, o alguien que simplemente quiere organizar mejor sus comidas, este ebook es para ti.*
 #### Qué vas a encontrar en esta guía:
 - *🍳 100 recetas fáciles y rápidas:* Almuerzos nutritivos, desayunos energéticos y cenas ligeras que se preparan en minutos.
-- *📝 Planes semanales sugeridos:* Ideas de combinaciones prácticas para toda la semana, ¡sin repetir platillo!
-- *💡 Consejos para un Meal Prep exitoso:* Cómo organizarte, hacer compras inteligentes y almacenar tus comidas de manera adecuada.

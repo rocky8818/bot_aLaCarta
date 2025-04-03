@@ -3,7 +3,7 @@
 import { addKeyword } from "@builderbot/bot";
 import { blacklist } from "~/lib/shopFunctions";
 
-const informes = addKeyword(["/^Informacion (.+)/i", "/^Información (.+)/i"],
+const informes = addKeyword(["/informacion/i", "/información/i"],
     {
       regex: true,
     }
