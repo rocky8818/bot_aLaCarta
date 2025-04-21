@@ -27,11 +27,15 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
       `Ahorra tiempo y dinero al planificar tus comidas semanales.\n` +
       `Reduce el estrés de "¿qué voy a comer hoy?" 🤔.\n` +
       `Mejora tu alimentación con recetas balanceadas y fáciles de preparar.\n` +
-      `Perfecto para personas ocupadas que quieren comer rico y saludable 🚀.\n`
+      `Perfecto para personas ocupadas que quieren comer rico y saludable 🚀.\n`, {
+        delay: 700,
+      }
   )
 
   .addAnswer(
-    `🌟 Si te interesa nuestro ebook📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`
+    `🌟 Si te interesa nuestro ebook📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`, {
+      delay: 700,
+    }
   );
 
 export default informes;
