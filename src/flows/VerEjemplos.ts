@@ -9,7 +9,7 @@ const VerEjemplos = addKeyword(["Ver ejemplos"])
       return endFlow();
     }
   })
-  .addAnswer("Mira este es ebook que te enviaremos.😎", {
+  .addAnswer("Mira este es recetario que te enviaremos.😎", {
     delay: 700,
   })
   .addAnswer("Su portada...", {

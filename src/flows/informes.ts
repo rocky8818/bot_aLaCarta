@@ -15,7 +15,7 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
   })
   .addAnswer(
     `🌟 ¿Te cuesta decidir qué comer todos los días y terminas gastando una fortuna en comida para la oficina? 🌟 \n\n` +
-      `Con nuestro eBook de Meal Prep , ¡olvídate del estrés de planificar tus comidas y del gasto descontrolado en deliverys o restaurantes!\n\n` +
+      `Con nuestro recetario de Meal Prep , ¡olvídate del estrés de planificar tus comidas y del gasto descontrolado en deliverys o restaurantes!\n\n` +
       `🔥 ¿Qué obtienes? 🔥` +
       `✅ 100 recetas prácticas y deliciosas divididas en:\n\n` +
       `20 desayunos energéticos para empezar el día con todo 💪.\n` +
@@ -33,13 +33,13 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
   )
 
   .addAnswer(
-    `🌟 Puedes ver algunas de las recetas en el ebook📒 enviando *Ver ejemplos*`, {
+    `🌟 Puedes ver algunas de las recetas en el recetario📒 enviando *Ver ejemplos*`, {
       delay: 700,
     }
   )
 
   .addAnswer(
-    `🌟 Si te interesa nuestro ebook📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`, {
+    `🌟 Si te interesa nuestro recetario📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`, {
       delay: 700,
     }
   );
