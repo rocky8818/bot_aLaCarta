@@ -33,6 +33,12 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
   )
 
   .addAnswer(
+    `🌟 Puedes ver algunas de las recetas en el ebook📒 enviando *Ver ejemplos*`, {
+      delay: 700,
+    }
+  )
+
+  .addAnswer(
     `🌟 Si te interesa nuestro ebook📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`, {
       delay: 700,
     }
