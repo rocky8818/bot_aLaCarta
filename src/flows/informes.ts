@@ -10,6 +10,7 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
   )
   .addAction(async (ctx, { endFlow }) => {
     if (blacklist.includes(ctx.from)) {
+      console.log(ctx.from, ' number in blacklist for info')
       return endFlow();
     }
   })

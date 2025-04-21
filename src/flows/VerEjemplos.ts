@@ -6,6 +6,7 @@ import { blacklist } from "~/lib/shopFunctions";
 const VerEjemplos = addKeyword(["Ver ejemplos"])
   .addAction(async (ctx, { endFlow }) => {
     if (blacklist.includes(ctx.from)) {
+      console.log(ctx.from, ' number in blacklist for examples')
       return endFlow();
     }
   })

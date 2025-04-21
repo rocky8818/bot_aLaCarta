@@ -75,6 +75,7 @@ const handleQueue = async (userId) => {
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
   .addAction(async (ctx, { endFlow }) => {
     if (blacklist.includes(ctx.from)) {
+      console.log(ctx.from, ' number in blacklist for AI')
       return endFlow();
     }
   })
