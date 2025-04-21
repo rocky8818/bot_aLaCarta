@@ -31,7 +31,7 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
   )
 
   .addAnswer(
-    `🌟 Si te interesa nuestro ebook📒 y quieres saber como pagar solo escribe *Quiero pagar*`
+    `🌟 Si te interesa nuestro ebook📒 y quieres saber como comprarlo solo escribe *Quiero comprar*`
   );
 
 export default informes;

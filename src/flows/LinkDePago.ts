@@ -6,9 +6,14 @@ import { blacklist } from "~/lib/shopFunctions";
 const LinkDePago = addKeyword([
   "Como pago",
   "Cómo pago",
+  "Como compro",
+  "Cómo compro",
   "Quiero pagar",
+  "Quiero comprar",
   "Como puedo pagar",
-  "Cómo puedo pagar"
+  "Cómo puedo pagar",
+  "Como puedo comprar",
+  "Cómo puedo comprar"
 ])
   .addAction(async (ctx, { endFlow }) => {
     if (blacklist.includes(ctx.from)) {
