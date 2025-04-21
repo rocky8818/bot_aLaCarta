@@ -12,6 +12,8 @@ const informes = addKeyword(["/informacion/i", "/información/i"],
     if (blacklist.includes(ctx.from)) {
       console.log(ctx.from, ' number in blacklist for info')
       return endFlow();
+    } else{
+      console.log(blacklist, 'doesnt include: ', ctx.from)
     }
   })
   .addAnswer(

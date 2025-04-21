@@ -8,6 +8,8 @@ const VerEjemplos = addKeyword(["Ver ejemplos"])
     if (blacklist.includes(ctx.from)) {
       console.log(ctx.from, ' number in blacklist for examples')
       return endFlow();
+    } else{
+      console.log(blacklist, 'doesnt include: ', ctx.from)
     }
   })
   .addAnswer("Mira este es recetario que te enviaremos.😎", {

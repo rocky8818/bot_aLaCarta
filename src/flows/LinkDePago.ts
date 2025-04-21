@@ -34,7 +34,7 @@ const LinkDePago = addKeyword([
 
   .addAnswer("Verás un menú como este, ahí podrás pagar con tarjeta de crédito, débito, efectivo ó transferencia.", {
     media:
-      "https://res.cloudinary.com/do144qmdb/image/upload/v1743482181/aLaCartaShop/Recetario_100_meal_preps_2_u7ggyz.png",
+      "https://res.cloudinary.com/do144qmdb/image/upload/v1745276684/aLaCartaShop/WhatsApp_Image_2025-04-21_at_4.44.54_PM_o3ad9c.jpg",
     delay: 700,
   });
 

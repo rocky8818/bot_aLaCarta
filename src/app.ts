@@ -77,6 +77,8 @@ const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
     if (blacklist.includes(ctx.from)) {
       console.log(ctx.from, ' number in blacklist for AI')
       return endFlow();
+    } else{
+      console.log(blacklist, 'doesnt include: ', ctx.from)
     }
   })
   .addAction(async (ctx, { flowDynamic, state, provider }) => {
