@@ -14,6 +14,8 @@ import LinkDePago from "./flows/LinkDePago";
 import { blacklist } from "./lib/shopFunctions";
 import VerEjemplos from "./flows/VerEjemplos";
 import informes from "./flows/informes";
+import BlacklistANumber from "./flows/BlackllisANumber";
+import UnBlacklistNumber from "./flows/UnBlackListNumber";
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008;
@@ -111,7 +113,9 @@ const main = async () => {
     welcomeFlow,
     LinkDePago,
     VerEjemplos,
-    informes
+    informes,
+    BlacklistANumber,
+    UnBlacklistNumber
   ]);
 
   /**

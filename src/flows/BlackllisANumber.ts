@@ -7,6 +7,8 @@ const BlacklistANumber = addKeyword(["/^sudo block (.+)/i"], {
 })
   .addAction(async (ctx, { endFlow, state }) => {
     if (whitelist.includes(ctx.from)) {
+        console.log(blacklist)
+    }else{
       return endFlow();
     }
     await state.update({
@@ -23,7 +25,12 @@ const BlacklistANumber = addKeyword(["/^sudo block (.+)/i"], {
     console.log(ctx.body);
     const number2Block = await state.get("number");
     console.log('number')
-    blacklist.push(number2Block)
-    
-  });
+    blacklist.push(`521`+number2Block)
+    blacklist.push(`52`+number2Block)
+    console.log(blacklist)
+  })
+
+  .addAction(async (ctx, {flowDynamic}) => {
+    await flowDynamic(blacklist.join('-'))
+  })
 export default BlacklistANumber;
