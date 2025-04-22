@@ -74,14 +74,13 @@ const handleQueue = async (userId) => {
  * @type {import('@builderbot/bot').Flow<BaileysProvider, MemoryDB>}
  */
 
-
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
   .addAction(async (ctx, { endFlow }) => {
     if (blacklist.includes(ctx.from)) {
-      console.log(ctx.from, ' number in blacklist for AI')
+      console.log(ctx.from, " number in blacklist for AI");
       return endFlow();
-    } else{
-      console.log(blacklist, 'doesnt include: ', ctx.from)
+    } else {
+      console.log(blacklist, "doesnt include: ", ctx.from);
     }
   })
   .addAction(async (ctx, { flowDynamic, state, provider }) => {
@@ -117,7 +116,7 @@ const main = async () => {
     informes,
     BlacklistANumber,
     UnBlacklistNumber,
-    GetBlacklist
+    GetBlacklist,
   ]);
 
   /**
