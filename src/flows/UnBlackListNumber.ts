@@ -27,16 +27,19 @@ const UnBlacklistNumber = addKeyword(["/^sudo unblock (.+)/i"], {
     const formattedNumbers = [`521${numberToUnblock}`, `52${numberToUnblock}`];
 
     // Filtrar la blacklist para eliminar los números coincidentes
+    const prevLength = blacklist.length
     const updatedBlacklist = blacklist.filter(
       (number) => !formattedNumbers.includes(number)
     );
 
+
     // Actualizar la blacklist global
+
     blacklist.length = 0; // Limpiar la lista actual
     blacklist.push(...updatedBlacklist); // Agregar los números restantes
 
     // Enviar una respuesta dinámica al usuario
-    if (updatedBlacklist.length < blacklist.length) {
+    if (updatedBlacklist.length < prevLength) {
       await flowDynamic(`El número ${numberToUnblock} ha sido eliminado de la blacklist.`);
     } else {
       await flowDynamic(`El número ${numberToUnblock} no se encontraba en la blacklist.`);
