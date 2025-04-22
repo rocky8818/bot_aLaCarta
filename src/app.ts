@@ -16,6 +16,7 @@ import VerEjemplos from "./flows/VerEjemplos";
 import informes from "./flows/informes";
 import BlacklistANumber from "./flows/BlackllisANumber";
 import UnBlacklistNumber from "./flows/UnBlackListNumber";
+import GetBlacklist from "./flows/GetBlacklist";
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008;
@@ -115,7 +116,8 @@ const main = async () => {
     VerEjemplos,
     informes,
     BlacklistANumber,
-    UnBlacklistNumber
+    UnBlacklistNumber,
+    GetBlacklist
   ]);
 
   /**

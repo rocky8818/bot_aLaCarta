@@ -2,7 +2,7 @@
 import { addKeyword } from "@builderbot/bot";
 import { whitelist, blacklist } from "../lib/shopFunctions";
 
-const UnBlacklistNumber = addKeyword(["/^sudo unblock (.+)/i"], {
+const GetBlacklist = addKeyword(["Get Blacklist"], {
   regex: true,
 })
   .addAction(async (ctx, { endFlow, state, flowDynamic }) => {
@@ -14,4 +14,4 @@ const UnBlacklistNumber = addKeyword(["/^sudo unblock (.+)/i"], {
     await flowDynamic(blacklist.join('_--_'))
   })
 
-export default UnBlacklistNumber;
+export default GetBlacklist;
